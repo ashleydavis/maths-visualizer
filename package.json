@@ -1,0 +1,41 @@
+{
+  "name": "maths-visualizer",
+  "version": "1.0.0",
+  "description": "Fun project to visualize mathematical transformations, built using TypeScript and React.",
+  "scripts": {
+    "start": "webpack-dev-server --open",
+    "clean": "rm -rf ./build",
+    "build": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ashleydavis/maths-visualizer.git"
+  },
+  "author": "ashley@codecapers.com.au",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ashleydavis/maths-visualizer/issues"
+  },
+  "homepage": "https://github.com/ashleydavis/maths-visualizer#readme",
+  "devDependencies": {
+    "ts-node": "^7.0.1",
+    "webpack-dev-server": "^3.1.9",
+    "source-map-loader": "^0.2.4",
+    "typescript": "^3.1.3",
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.1.2",
+    "@types/react": "^16.4.18",
+    "@types/react-dom": "^16.0.9",
+    "awesome-typescript-loader": "^5.2.1",
+    "copy-webpack-plugin": "^4.4.2"
+  },
+  "dependencies": {
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2",
+    "react-mathjax-preview": "^0.1.10"
+  },
+  "engines": {
+    "node": "8.11.1"
+  }
+}
