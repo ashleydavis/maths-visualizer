@@ -7,25 +7,32 @@ export interface IAppProps {
 export interface IAppState {
 }
 
-export class AppUI extends React.Component<IAppProps, IAppState> {
+export interface IMathsFormula {
+    title: string;
+    expr: string;   
+}
 
+export class AppUI extends React.Component<IAppProps, IAppState> {
+    
     render() {
+
+        const formulas: IMathsFormula[] = [
+            {
+                title: "commutative property of multiplication",
+                expr: "`y*x`",
+            }    
+        ];
+
         return (
             <div>
-                <div
-                    id="math1"
-                    >
-                    <MathJax 
-                        math={"`x*y`"} 
-                        />
-                </div>
-                <div
-                    id="math2"
-                    >
-                    <MathJax 
-                        math={"`y*x`"} 
-                        />
-                </div>
+                <div><input value="x*y" onChange={() => {}} /></div>
+                <div><MathJax math="`x*y`" /></div>
+                {formulas.map((formula, index) => 
+                    <div key={index}>
+                        <div>{index+1} {formula.title}</div>
+                        <MathJax math={formula.expr} />
+                    </div>
+                )}
             </div>
         );
     }
