@@ -33,6 +33,7 @@
   "dependencies": {
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
+    "react-graph-vis": "^1.0.2",
     "react-mathjax-preview": "^0.1.10"
   },
   "engines": {
