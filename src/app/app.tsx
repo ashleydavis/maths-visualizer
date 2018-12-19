@@ -1,11 +1,14 @@
 import * as React from 'react';
 import MathJax from 'react-mathjax-preview';
 import Graph from 'react-graph-vis';
+import { permuteTransformations, IExpr } from './permute-transformations';
 
 export interface IAppProps {
 }
 
 export interface IAppState {
+    expr: string;
+    transformed: IExpr[];
 }
 
 export interface IMathsFormula {
@@ -13,36 +16,22 @@ export interface IMathsFormula {
     expr: string;   
 }
 
-const graph = {
-    nodes: [
-        {id: 1, label: 'Node 1'},
-        {id: 2, label: 'Node 2'},
-        {id: 3, label: 'Node 3'},
-        {id: 4, label: 'Node 4'},
-        {id: 5, label: 'Node 5'}
-      ],
-    edges: [
-        {from: 1, to: 2},
-        {from: 1, to: 3},
-        {from: 2, to: 4},
-        {from: 2, to: 5}
-      ]
-  };
-  
-    const options = {
-        width: '600px',
-        height: '300px',
-        layout: {
-            improvedLayout:true,
-            hierarchical: {
-                enabled: true,
-                direction: "LR",
-            }
-      },
-      edges: {
-          color: "black"
-      }
-  };
+const options = {
+    width: '600px',
+    height: '300px',
+    layout: {
+        //improvedLayout: true,
+        /*
+        hierarchical: {
+            enabled: true,
+            direction: "LR",
+        }
+        */
+    },
+    edges: {
+        color: "black"
+    }
+};
   
   const events = {
       select: (event: any) => {
@@ -52,24 +41,80 @@ const graph = {
   }
 
 export class AppUI extends React.Component<IAppProps, IAppState> {
+
+    constructor(props: IAppProps) {
+        super(props);
+
+        const defaultExpr = "x*y";
+
+        this.state = {
+            expr: defaultExpr,
+            transformed: permuteTransformations(defaultExpr),
+        };
+
+        this.onExprChange = this.onExprChange.bind(this);
+    }
+
+    private onExprChange(event: React.FormEvent<HTMLInputElement>) {
+        const newExpr = event.currentTarget.value;
+        this.setState({ 
+            expr: newExpr,
+            transformed: permuteTransformations(newExpr),
+        });
+    }
+
+    flatten(arr: any[][]): any[] {
+        return arr.reduce(function (flat, toFlatten) {
+          return flat.concat(toFlatten);
+        }, []);
+    }
+
+    private buildGraph(): any {
+        return {
+            nodes: this.state.transformed.map(expr => {
+                return {
+                    id: expr.expr,
+                    label: expr.expr,
+                    shape: "box",
+                }
+            }),
+
+            edges: this.flatten(this.state.transformed
+                    .map(expr => expr.pathways
+                        .map(pathway => {
+                            return {
+                                from: expr.expr,
+                                to: pathway.dest.expr,
+                                label: pathway.rule.name,
+                                arrows: "to,from",
+                            }
+                        })
+                    )
+                )
+        };
+    }
     
     render() {
 
-        const formulas: IMathsFormula[] = [
-            {
-                title: "commutative property of multiplication",
-                expr: "`y*x`",
-            }    
-        ];
+        const graph = this.buildGraph();
 
         return (
             <div>
-                <div><input value="x*y" onChange={() => {}} /></div>
-                <div><MathJax math="`x*y`" /></div>
-                {formulas.map((formula, index) => 
+                <div>
+                    <input 
+                        value={this.state.expr}
+                        onChange={this.onExprChange} 
+                        />
+                </div>
+                <div>
+                    <MathJax 
+                        math={"`" + this.state.expr + "`"}
+                        />
+                </div>
+                {this.state.transformed.map((transformed, index) => 
                     <div key={index}>
-                        <div>{index+1} {formula.title}</div>
-                        <MathJax math={formula.expr} />
+                        <div>{index+1}</div>
+                        <MathJax math={transformed.expr} />
                     </div>
                 )}  
                 <div>

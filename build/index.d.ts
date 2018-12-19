@@ -1,1 +1,1 @@
-export {};
+import "./modules.d.ts";
