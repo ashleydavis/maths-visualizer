@@ -53,7 +53,26 @@ module.exports = {
             {
                 from: "./src/index.html",
                 to: outputDir,
-            }
+            },
+
+            // Copy external CSS files.
+            {
+                from: "./node_modules/tailwindcss/dist/tailwind.css",
+                to: path.join(outputDir, "styles", "tailwind.css"),
+            },
+            {
+                from: "./node_modules/@blueprintjs/core/lib/css/blueprint.css",
+                to: path.join(outputDir, "styles", "blueprint.css"),
+            },
+            {
+                from: "./node_modules/@blueprintjs/icons/lib/css/blueprint-icons.css",
+                to: path.join(outputDir, "styles", "blueprint-icons.css"),
+            },
+            {
+                from: "./src/index.css",
+                to: path.join(outputDir, "styles", "index.css"),
+            },
+            
         ]),
 
         // https://hackernoon.com/react-with-typescript-and-webpack-654f93f34db6
