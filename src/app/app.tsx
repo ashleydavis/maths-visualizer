@@ -3,8 +3,9 @@ import MathJax from 'react-mathjax-preview';
 import Graph from 'react-graph-vis';
 import { permuteTransformations, IExpr } from './permute-transformations';
 import { Container } from './components/container';
-import { Row } from './components/row';
-import { Column } from './components/column';
+import { Row, RowAlign } from './components/row';
+import { Column, ColumnAlign } from './components/column';
+import { Card } from '@blueprintjs/core';
 
 const defaultExpr = "x*y*z";
 
@@ -23,8 +24,7 @@ export interface IMathsFormula {
 }
 
 const options = {
-    //width: '600px',
-    height: '600px',
+    autoResize: true,
     layout: {
         //improvedLayout: true,
         /*
@@ -105,35 +105,56 @@ export class AppUI extends React.Component<IAppProps, IAppState> {
         const graph = this.buildGraph();
 
         return (
-            <Container
-                maxWidth="80%"
+            <div
+                className="pt-8 h-screen"
                 >
+                <Container
+                    className="mt-8 h-full"
+                    maxWidth="80%"                    
+                    >
+                    <Card className="h-full">
+                        <Row 
+                            className="h-full"
+                            alignItems={RowAlign.Start}
+                            >
+                            <Column
+                                alignItems={ColumnAlign.Start}
+                                width="300px"
+                                >
+                                <div>
+                                    <input 
+                                        value={this.state.expr}
+                                        onChange={this.onExprChange} 
+                                        />
+                                </div>
+                                <div>
+                                    <MathJax 
+                                        math={"`" + this.state.expr + "`"}
+                                        />
+                                </div>
+                            </Column>
 
-                <Row>
-                    <Column>
-                        <div>
-                            <input 
-                                value={this.state.expr}
-                                onChange={this.onExprChange} 
-                                />
-                        </div>
-                        <div>
-                            <MathJax 
-                                math={"`" + this.state.expr + "`"}
-                                />
-                        </div>
-                    </Column>
+                            <Column
+                                className="h-full"
+                                max
+                                >
+                                <Graph 
+                                    style={{ 
+                                        border: "1px solid gray", 
+                                        width: "100%",
+                                        height: "100%",
+                                    }}
+                                    graph={graph} 
+                                    options={options} 
+                                    events={events} 
+                                    />
+                            </Column>
+                        
+                        </Row>
+                    </Card>
 
-                    <Column>
-                        <Graph 
-                            style={{ border: "1px solid gray", }}
-                            graph={graph} options={options} events={events} 
-                            />
-                    </Column>
-                
-                </Row>
-
-            </Container>
+                </Container>
+            </div>
         );
     }
 }   

@@ -38,19 +38,42 @@ export interface IColumnProps {
     // Specifies the content justification for the column.
     //
     justifyContent?: ColumnJustify;
+
+    /**
+     * Maximize the size of the spacer.
+     */
+    max?: boolean;
+
+    //
+    // Width of the column.
+    //
+    width?: string;
+    
 }
 
 export class Column extends React.Component<IColumnProps, {}> {
 
     render() {
+        let className = this.props.className;
+
+        if (this.props.max) {
+            if (!className) {
+                className = "flex-grow";
+            }
+            else {
+                className += " flex-grow";
+            }
+        }
+
         return (
             <div
-                className={this.props.className} 
+                className={className} 
                 style={{
                     display: "flex",
                     flexDirection: "column",
                     alignItems: this.props.alignItems || ColumnAlign.Center,
                     justifyContent: this.props.justifyContent || ColumnJustify.Center,
+                    width: this.props.width,
                 }}
                 >
                 {this.props.children}

@@ -25,18 +25,41 @@ export interface IRowProps {
     // Specifies the alignment of children.
     //
     alignItems?: RowAlign;
+
+    /**
+     * Maximize the size of the spacer.
+     */
+    max?: boolean;
+
+    //
+    // Height of the row.
+    //
+    height?: string;
 }
 
 export class Row extends React.Component<IRowProps, {}> {
 
     render() {
+
+        let className = this.props.className;
+
+        if (this.props.max) {
+            if (!className) {
+                className = "flex-grow";
+            }
+            else {
+                className += " flex-grow";
+            }
+        }
+        
         return (
             <div 
-                className={this.props.className}
+                className={className}
                 style={{
                     display: "flex",
                     flexDirection: "row",
                     alignItems: this.props.alignItems || RowAlign.Center,
+                    height: this.props.height,
                 }}
                 >
                 {this.props.children}
