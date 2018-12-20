@@ -192,19 +192,25 @@ function walkExpressionTree(sourceExpression: IExpr, childNode: any, childPath: 
             for (const transformedNode of transformedNodes) {
                 const childLens = lensPath(childPath);
                 const newRootNode = set(childLens, transformedNode, sourceExpression.rootNode);
+                const destExpr = newRootNode.toString();
+
+                const existingDestExpression = working.expressionMap[destExpr];
+                if (existingDestExpression) {
+                    // Already got here through another pathway.
+                    sourceExpression.pathways.push({
+                        rule: rule,
+                        nodeId: childNode.id,
+                        dest: existingDestExpression,
+                    });
+                        
+                    continue;
+                }
 
                 const destExpression = {
-                    
-                    // be good if the tree was flattened at this point.
-                    expr: newRootNode.toString(),
+                    expr: destExpr,
                     rootNode: newRootNode,
                     pathways: [],
                 }; 
-
-                if (working.expressionMap[destExpression.expr]) {
-                    // Already got here through another pathway.
-                    continue;
-                }
 
                 sourceExpression.pathways.push({
                     rule: rule,
