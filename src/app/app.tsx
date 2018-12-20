@@ -3,11 +3,14 @@ import MathJax from 'react-mathjax-preview';
 import Graph from 'react-graph-vis';
 import { permuteTransformations, IExpr } from './permute-transformations';
 
+const defaultExpr = "x*y*z";
+
 export interface IAppProps {
 }
 
 export interface IAppState {
     expr: string;
+    selectedExpr: string;
     transformed: IExpr[];
 }
 
@@ -17,8 +20,8 @@ export interface IMathsFormula {
 }
 
 const options = {
-    width: '600px',
-    height: '300px',
+    //width: '600px',
+    height: '800px',
     layout: {
         //improvedLayout: true,
         /*
@@ -45,10 +48,9 @@ export class AppUI extends React.Component<IAppProps, IAppState> {
     constructor(props: IAppProps) {
         super(props);
 
-        const defaultExpr = "x*y";
-
         this.state = {
             expr: defaultExpr,
+            selectedExpr: defaultExpr,
             transformed: permuteTransformations(defaultExpr),
         };
 
@@ -59,6 +61,7 @@ export class AppUI extends React.Component<IAppProps, IAppState> {
         const newExpr = event.currentTarget.value;
         this.setState({ 
             expr: newExpr,
+            selectedExpr: newExpr,
             transformed: permuteTransformations(newExpr),
         });
     }
@@ -111,12 +114,6 @@ export class AppUI extends React.Component<IAppProps, IAppState> {
                         math={"`" + this.state.expr + "`"}
                         />
                 </div>
-                {this.state.transformed.map((transformed, index) => 
-                    <div key={index}>
-                        <div>{index+1}</div>
-                        <MathJax math={transformed.expr} />
-                    </div>
-                )}  
                 <div>
                     <Graph 
                         style={{ border: "1px solid gray", }}
