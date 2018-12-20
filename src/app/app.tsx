@@ -2,6 +2,9 @@ import * as React from 'react';
 import MathJax from 'react-mathjax-preview';
 import Graph from 'react-graph-vis';
 import { permuteTransformations, IExpr } from './permute-transformations';
+import { Container } from './components/container';
+import { Row } from './components/row';
+import { Column } from './components/column';
 
 const defaultExpr = "x*y*z";
 
@@ -21,7 +24,7 @@ export interface IMathsFormula {
 
 const options = {
     //width: '600px',
-    height: '800px',
+    height: '600px',
     layout: {
         //improvedLayout: true,
         /*
@@ -102,25 +105,35 @@ export class AppUI extends React.Component<IAppProps, IAppState> {
         const graph = this.buildGraph();
 
         return (
-            <div>
-                <div>
-                    <input 
-                        value={this.state.expr}
-                        onChange={this.onExprChange} 
-                        />
-                </div>
-                <div>
-                    <MathJax 
-                        math={"`" + this.state.expr + "`"}
-                        />
-                </div>
-                <div>
-                    <Graph 
-                        style={{ border: "1px solid gray", }}
-                        graph={graph} options={options} events={events} 
-                        />
-                </div>
-            </div>
+            <Container
+                maxWidth="80%"
+                >
+
+                <Row>
+                    <Column>
+                        <div>
+                            <input 
+                                value={this.state.expr}
+                                onChange={this.onExprChange} 
+                                />
+                        </div>
+                        <div>
+                            <MathJax 
+                                math={"`" + this.state.expr + "`"}
+                                />
+                        </div>
+                    </Column>
+
+                    <Column>
+                        <Graph 
+                            style={{ border: "1px solid gray", }}
+                            graph={graph} options={options} events={events} 
+                            />
+                    </Column>
+                
+                </Row>
+
+            </Container>
         );
     }
 }   
