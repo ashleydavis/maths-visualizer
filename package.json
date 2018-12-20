@@ -35,14 +35,16 @@
     "webpack-dev-server": "^3.1.9"
   },
   "dependencies": {
+    "@blueprintjs/core": "^3.10.0",
+    "@blueprintjs/icons": "^3.4.0",
     "chai": "^4.2.0",
     "mathjs": "^5.4.0",
     "ramda": "^0.26.1",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-graph-vis": "^1.0.2",
-    
-    "react-mathjax-preview": "^0.1.10"
+    "react-mathjax-preview": "^0.1.10",
+    "tailwindcss": "^0.7.3"
   },
   "engines": {
     "node": "8.11.1"
