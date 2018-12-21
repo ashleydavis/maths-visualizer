@@ -134,16 +134,22 @@ function walkExpressionTree(sourceExpression, childNode, childPath, working) {
                 var transformedNode = transformedNodes_1[_a];
                 var childLens = ramda_1.lensPath(childPath);
                 var newRootNode = ramda_1.set(childLens, transformedNode, sourceExpression.rootNode);
+                var destExpr = newRootNode.toString();
+                var existingDestExpression = working.expressionMap[destExpr];
+                if (existingDestExpression) {
+                    // Already got here through another pathway.
+                    sourceExpression.pathways.push({
+                        rule: rule,
+                        nodeId: childNode.id,
+                        dest: existingDestExpression,
+                    });
+                    continue;
+                }
                 var destExpression = {
-                    // be good if the tree was flattened at this point.
-                    expr: newRootNode.toString(),
+                    expr: destExpr,
                     rootNode: newRootNode,
                     pathways: [],
                 };
-                if (working.expressionMap[destExpression.expr]) {
-                    // Already got here through another pathway.
-                    continue;
-                }
                 sourceExpression.pathways.push({
                     rule: rule,
                     nodeId: childNode.id,

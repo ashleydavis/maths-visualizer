@@ -50,17 +50,25 @@ export class AppUI extends React.Component<IAppProps, IAppState> {
         };
 
         this.onExprChange = this.onExprChange.bind(this);
+        this.rebuildGraph = lodash.debounce(this.rebuildGraph.bind(this), 1000);
+    }
+
+    private rebuildGraph() {
+        this.setState({ 
+            transformed: permuteTransformations(this.state.expr),
+            graph: this.buildGraph(this.state.transformed),
+        });
     }
 
     private onExprChange(event: React.FormEvent<HTMLInputElement>) {
         const newExpr = event.currentTarget.value;
-        const transformed = permuteTransformations(newExpr);
-        this.setState({ 
-            expr: newExpr,
-            selectedExpr: newExpr,
-            transformed: transformed,
-            graph: this.buildGraph(transformed),
-        });
+        this.setState(
+            { 
+                expr: newExpr,
+                selectedExpr: newExpr,
+            }, 
+            () => this.rebuildGraph()
+        );
     }
 
     flatten(arr: any[][]): any[] {
