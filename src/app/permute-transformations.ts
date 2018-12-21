@@ -1,7 +1,6 @@
-import * as math from 'mathjs';
 import { set, lensPath } from 'ramda';
 import { rules } from './transformation-rules';
-const AssignmentNode = require('mathjs/src/expression/node/AssignmentNode');
+const math = require('../mathjs/main.js');
 
 export interface IPathway {
     rule: IRule;
@@ -60,12 +59,14 @@ function matchRule(matcher: IMatcher, childNode: any) { //todo: type me
         }
     }
 
+    /*
     console.log("Matching: ");
     console.log(matcher);
     console.log("Against:");
     console.log(JSON.stringify(childNode, null, 4)); //fio:
 
     console.log("!! Matched"); //fio:
+    */
 
     return true;
 }

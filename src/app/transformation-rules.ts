@@ -1,7 +1,8 @@
 import { IRule } from "./permute-transformations";
-const ConstantNode = require('mathjs/src/expression/node/ConstantNode');
+const ConstantNode = require('../mathjs/expression/node/ConstantNode');
 import { assert } from 'chai';
-import * as math from 'mathjs';
+const math = require('../mathjs/main.js');
+console.log(math); //fio:
 
 function copyInstance (original: any) {
     var copied = Object.assign(
@@ -119,11 +120,9 @@ export const rules: IRule[] = [
         },
 
         apply: (node: any) => { //todo: type me
-            console.log("***********************8"); //fio:     
 
             let base = node.args[0].toString();
             let exponent = node.args[1].value;
-            console.log("exponent: " + exponent); //fio:
             if (exponent === 0) {
                 return 1;
             }
@@ -135,9 +134,6 @@ export const rules: IRule[] = [
                 }
                 newExpr += base;
             }
-
-            console.log("new expr: " + newExpr); //fio:
-            console.log(math.parse(newExpr)); //fio:
 
             return [math.parse(newExpr)];
         },
