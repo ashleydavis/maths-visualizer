@@ -140,4 +140,26 @@ export const rules: IRule[] = [
 
         animation: "collapse_2",
     },
+
+    {
+        name: "rearrange equality",
+        
+        match: {
+            op: "=",
+        },
+
+        apply: (node: any) => { //todo: type me
+            assert(node.args.length === 2);
+
+            const reversed = copyInstance(node);
+            reversed.args = [
+                node.args[1],
+                node.args[0],
+            ]
+            return [reversed];
+        },
+
+        animation: "swap_2",
+    },
+    
 ];
