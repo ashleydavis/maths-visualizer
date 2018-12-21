@@ -112,7 +112,11 @@ export class AppUI extends React.Component<IAppProps, IAppState> {
                     className="mt-8 h-full"
                     maxWidth="80%"                    
                     >
-                    <Card className="h-full">
+                    <Card 
+                        style={{
+                            height: "95%",
+                        }}
+                        >
                         <Row 
                             className="h-full"
                             alignItems={RowAlign.Start}
