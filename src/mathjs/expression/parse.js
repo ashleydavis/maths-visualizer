@@ -585,39 +585,9 @@ function factory (type, config, load, typed) {
     const node = parseConditional(state)
 
     if (state.token === '=') {
-      if (type.isSymbolNode(node)) {
-        // parse a variable assignment like 'a = 2/3'
-        name = node.name
         getTokenSkipNewline(state)
         value = parseAssignment(state)
-        return new AssignmentNode(new SymbolNode(name), value)
-      } else if (type.isAccessorNode(node)) {
-        // parse a matrix subset assignment like 'A[1,2] = 4'
-        getTokenSkipNewline(state)
-        value = parseAssignment(state)
-        return new AssignmentNode(node.object, node.index, value)
-      } else if (type.isFunctionNode(node) && type.isSymbolNode(node.fn)) {
-        // parse function assignment like 'f(x) = x^2'
-        valid = true
-        args = []
-
-        name = node.name
-        node.args.forEach(function (arg, index) {
-          if (type.isSymbolNode(arg)) {
-            args[index] = arg.name
-          } else {
-            valid = false
-          }
-        })
-
-        if (valid) {
-          getTokenSkipNewline(state)
-          value = parseAssignment(state)
-          return new FunctionAssignmentNode(name, args, value)
-        }
-      }
-
-      throw createSyntaxError(state, 'Invalid left hand side of assignment operator =')
+        return new OperatorNode('=', '=', [node, value])
     }
 
     return node
