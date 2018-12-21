@@ -20,6 +20,7 @@
   "homepage": "https://github.com/ashleydavis/maths-visualizer#readme",
   "devDependencies": {
     "@types/chai": "^4.1.7",
+    "@types/lodash": "^4.14.119",
     "@types/mathjs": "^4.4.4",
     "@types/node": "^10.12.18",
     "@types/ramda": "^0.25.43",
@@ -38,6 +39,7 @@
     "@blueprintjs/core": "^3.10.0",
     "@blueprintjs/icons": "^3.4.0",
     "chai": "^4.2.0",
+    "lodash": "^4.17.11",
     "mathjs": "^5.4.0",
     "ramda": "^0.26.1",
     "react": "^16.5.2",

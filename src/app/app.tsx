@@ -6,6 +6,7 @@ import { Container } from './components/container';
 import { Row, RowAlign } from './components/row';
 import { Column, ColumnAlign } from './components/column';
 import { Card, InputGroup, FormGroup } from '@blueprintjs/core';
+import * as lodash from 'lodash';
 
 const defaultExpr = "x*y*z";
 
@@ -16,11 +17,7 @@ export interface IAppState {
     expr: string;
     selectedExpr: string;
     transformed: IExpr[];
-}
-
-export interface IMathsFormula {
-    title: string;
-    expr: string;   
+    graph: any,
 }
 
 const options = {
@@ -44,10 +41,12 @@ export class AppUI extends React.Component<IAppProps, IAppState> {
     constructor(props: IAppProps) {
         super(props);
 
+        const transformed = permuteTransformations(defaultExpr);
         this.state = {
             expr: defaultExpr,
             selectedExpr: defaultExpr,
-            transformed: permuteTransformations(defaultExpr),
+            transformed: transformed,
+            graph: this.buildGraph(transformed),
         };
 
         this.onExprChange = this.onExprChange.bind(this);
@@ -55,10 +54,12 @@ export class AppUI extends React.Component<IAppProps, IAppState> {
 
     private onExprChange(event: React.FormEvent<HTMLInputElement>) {
         const newExpr = event.currentTarget.value;
+        const transformed = permuteTransformations(newExpr);
         this.setState({ 
             expr: newExpr,
             selectedExpr: newExpr,
-            transformed: permuteTransformations(newExpr),
+            transformed: transformed,
+            graph: this.buildGraph(transformed),
         });
     }
 
@@ -68,9 +69,9 @@ export class AppUI extends React.Component<IAppProps, IAppState> {
         }, []);
     }
 
-    private buildGraph(): any {
+    private buildGraph(transformed: IExpr[]): any {
         return {
-            nodes: this.state.transformed.map(expr => {
+            nodes: transformed.map(expr => {
                 return {
                     id: expr.expr,
                     label: expr.expr,
@@ -78,7 +79,7 @@ export class AppUI extends React.Component<IAppProps, IAppState> {
                 }
             }),
 
-            edges: this.flatten(this.state.transformed
+            edges: this.flatten(transformed
                     .map(expr => expr.pathways
                         .map(pathway => {
                             return {
@@ -94,8 +95,6 @@ export class AppUI extends React.Component<IAppProps, IAppState> {
     }
     
     render() {
-
-        const graph = this.buildGraph();
 
         const events = {
             select: (event: any) => {
@@ -166,11 +165,11 @@ export class AppUI extends React.Component<IAppProps, IAppState> {
                                 >
                                 <Graph 
                                     style={{ 
-                                        border: "1px solid gray", 
+                                        border: "1px solid lightgray", 
                                         width: "100%",
                                         height: "100%",
                                     }}
-                                    graph={graph} 
+                                    graph={this.state.graph} 
                                     options={options} 
                                     events={events} 
                                     />
