@@ -1,7 +1,10 @@
 body {
-    font-size: 2em;
+    font-size: 1.5em;
+}
+
+label {
 }
 
 input {
-    font-size: 1em;
+    font-size: 0.8em !important;
 }

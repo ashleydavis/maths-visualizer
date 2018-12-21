@@ -5,7 +5,7 @@ import { permuteTransformations, IExpr } from './permute-transformations';
 import { Container } from './components/container';
 import { Row, RowAlign } from './components/row';
 import { Column, ColumnAlign } from './components/column';
-import { Card } from '@blueprintjs/core';
+import { Card, InputGroup, FormGroup } from '@blueprintjs/core';
 
 const defaultExpr = "x*y*z";
 
@@ -39,13 +39,6 @@ const options = {
     }
 };
   
-  const events = {
-      select: (event: any) => {
-          var { nodes, edges } = event;
-          console.log(event);   
-      }
-  }
-
 export class AppUI extends React.Component<IAppProps, IAppState> {
 
     constructor(props: IAppProps) {
@@ -104,6 +97,17 @@ export class AppUI extends React.Component<IAppProps, IAppState> {
 
         const graph = this.buildGraph();
 
+        const events = {
+            select: (event: any) => {
+                var { nodes, edges } = event;
+                console.log(event);   
+
+                if (nodes && nodes.length > 0) {
+                    this.setState({ selectedExpr: nodes[0] });
+                }
+            }
+        }
+
         return (
             <div
                 className="pt-8 h-screen"
@@ -125,16 +129,34 @@ export class AppUI extends React.Component<IAppProps, IAppState> {
                                 alignItems={ColumnAlign.Start}
                                 width="300px"
                                 >
-                                <div>
-                                    <input 
+                                <FormGroup
+                                    label={"Enter formula"}
+                                    labelFor="formula-input"
+                                    >
+                                    <InputGroup 
+                                        id="formula-input" 
+                                        large
+                                        placeholder="Enter a formula to evaluate" 
                                         value={this.state.expr}
                                         onChange={this.onExprChange} 
+                                        autoFocus
                                         />
+                                </FormGroup>
+                                <div className="w-full mt-8">
+                                    <div>Input</div>
+                                    <Card className="mt-2 mr-8">
+                                        <MathJax 
+                                            math={"`" + this.state.expr + "`"}
+                                            />
+                                    </Card>
                                 </div>
-                                <div>
-                                    <MathJax 
-                                        math={"`" + this.state.expr + "`"}
-                                        />
+                                <div className="w-full mt-8">
+                                    <div>Selected</div>
+                                    <Card className="mt-2 mr-8">
+                                        <MathJax 
+                                            math={"`" + this.state.selectedExpr + "`"}
+                                            />
+                                    </Card>
                                 </div>
                             </Column>
 
