@@ -22,7 +22,8 @@ var row_1 = require("./components/row");
 var column_1 = require("./components/column");
 var core_1 = require("@blueprintjs/core");
 var lodash = require("lodash");
-var defaultExpr = "x*y*z";
+//const defaultExpr = "x*y*z";
+var defaultExpr = "E = mc^2";
 var options = {
     autoResize: true,
     layout: {
@@ -54,7 +55,6 @@ var AppUI = /** @class */ (function (_super) {
         return _this;
     }
     AppUI.prototype.rebuildGraph = function () {
-        console.log("Rebuilding graph!"); //fio:
         this.setState({
             transformed: permute_transformations_1.permuteTransformations(this.state.expr),
             graph: this.buildGraph(this.state.transformed),
