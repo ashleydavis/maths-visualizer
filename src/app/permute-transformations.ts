@@ -1,6 +1,7 @@
 import * as math from 'mathjs';
 import { set, lensPath } from 'ramda';
 import { rules } from './transformation-rules';
+const AssignmentNode = require('mathjs/src/expression/node/AssignmentNode');
 
 export interface IPathway {
     rule: IRule;
@@ -31,10 +32,6 @@ export interface IRule {
 }
 
 function matchRule(matcher: IMatcher, childNode: any) { //todo: type me
-    //console.log("Matching: ");
-    //console.log(matcher);
-    //console.log("Against:");
-    //console.log(JSON.stringify(childNode, null, 4)); //fio:
 
     const asJSON = childNode.toJSON();
 
@@ -63,7 +60,12 @@ function matchRule(matcher: IMatcher, childNode: any) { //todo: type me
         }
     }
 
-    //console.log("!! Matched"); //fio:
+    console.log("Matching: ");
+    console.log(matcher);
+    console.log("Against:");
+    console.log(JSON.stringify(childNode, null, 4)); //fio:
+
+    console.log("!! Matched"); //fio:
 
     return true;
 }
@@ -76,6 +78,10 @@ function walkExpressionTree(sourceExpression: IExpr, childNode: any, childPath: 
             const grandChildPath = childPath.concat(["args", grandChildIndex]);
             walkExpressionTree(sourceExpression, grandChildNode, grandChildPath, working);
         }
+    }
+    else if (childNode.value instanceof Object) {
+        const grandChildPath = childPath.concat(["value"]);
+        walkExpressionTree(sourceExpression, childNode.value, grandChildPath, working);
     }
 
     for (const rule of rules) {
@@ -145,8 +151,8 @@ export function permuteTransformations(expr: string) {
 
     indexExpression(rootNode);
 
-    //console.log("**** Input:"); //fio:
-    //console.log(JSON.stringify(rootNode, null, 4)); //fio:
+    console.log("**** Input:"); //fio:
+    console.log(JSON.stringify(rootNode, null, 4)); //fio:
 
     //todo: index all the nodes!
 

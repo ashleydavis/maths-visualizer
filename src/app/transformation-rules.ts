@@ -1,6 +1,7 @@
 import { IRule } from "./permute-transformations";
 const ConstantNode = require('mathjs/src/expression/node/ConstantNode');
 import { assert } from 'chai';
+import * as math from 'mathjs';
 
 function copyInstance (original: any) {
     var copied = Object.assign(
@@ -104,4 +105,43 @@ export const rules: IRule[] = [
         animation: "swap_2",
     },
 
+    {
+        name: "constant exponent converts to multiplication",
+        
+        match: {
+            op: "^",
+            args: [
+                {
+                    argIndex: 1,
+                    type: "ConstantNode",
+                },
+            ],
+        },
+
+        apply: (node: any) => { //todo: type me
+            console.log("***********************8"); //fio:     
+
+            let base = node.args[0].toString();
+            let exponent = node.args[1].value;
+            console.log("exponent: " + exponent); //fio:
+            if (exponent === 0) {
+                return 1;
+            }
+
+            let newExpr = "";
+            while (exponent--) {
+                if (newExpr.length > 0) {
+                    newExpr += "*";
+                }
+                newExpr += base;
+            }
+
+            console.log("new expr: " + newExpr); //fio:
+            console.log(math.parse(newExpr)); //fio:
+
+            return [math.parse(newExpr)];
+        },
+
+        animation: "collapse_2",
+    },
 ];
