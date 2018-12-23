@@ -97,12 +97,17 @@ function walkExpressionTree(sourceExpression: IExpr, childNode: any, childPath: 
 
                 const existingDestExpression = working.expressionMap[destExpr];
                 if (existingDestExpression) {
+                    
                     // Already got here through another pathway.
-                    sourceExpression.pathways.push({
-                        rule: rule,
-                        nodeId: childNode.id,
-                        dest: existingDestExpression,
-                    });
+
+                    if (sourceExpression.expr !== existingDestExpression.expr) {
+                        // Not a pathway back to the same equation.
+                        sourceExpression.pathways.push({
+                            rule: rule,
+                            nodeId: childNode.id,
+                            dest: existingDestExpression,
+                        });
+                    }
                         
                     continue;
                 }

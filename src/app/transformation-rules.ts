@@ -142,7 +142,7 @@ export const rules: IRule[] = [
     },
 
     {
-        name: "rearrange equality",
+        name: "reverse equation",
         
         match: {
             op: "=",

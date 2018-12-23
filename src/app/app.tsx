@@ -9,8 +9,8 @@ import { Card, InputGroup, FormGroup } from '@blueprintjs/core';
 import * as lodash from 'lodash';
 
 //const defaultExpr = "x*y*z";
-//const defaultExpr = "E = m*c^2";
-const defaultExpr = "a + b = b + a";
+const defaultExpr = "E = m*c^2";
+//const defaultExpr = "a + b = b + a";
 
 export interface IAppProps {
 }
