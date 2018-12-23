@@ -2,7 +2,6 @@ import { IRule } from "./permute-transformations";
 const ConstantNode = require('../mathjs/expression/node/ConstantNode');
 import { assert } from 'chai';
 const math = require('../mathjs/main.js');
-console.log(math); //fio:
 
 function copyInstance (original: any) {
     var copied = Object.assign(
@@ -17,6 +16,7 @@ function copyInstance (original: any) {
 export const rules: IRule[] = [
     {
         name: "multiply constants",
+        shortName: "multiply constants",
         
         match: {
             op: "*",
@@ -42,7 +42,8 @@ export const rules: IRule[] = [
     
     {
         name: "multiply by identity",
-        
+        shortName: "multiply - identity",
+
         match: {
             op: "*",
             args: [
@@ -64,6 +65,7 @@ export const rules: IRule[] = [
 
     {
         name: "multiply by identity",
+        shortName: "multiply - identity",
         
         match: {
             op: "*",
@@ -86,6 +88,7 @@ export const rules: IRule[] = [
     
     {
         name: "commutative property of multiplication",
+        shortName: "multiplication - commutative",
         def: "http://www.coolmath.com/prealgebra/06-properties/02-properties-commutative-multiplication-02",
         
         match: {
@@ -108,6 +111,7 @@ export const rules: IRule[] = [
 
     {
         name: "constant exponent converts to multiplication",
+        shortName: "constant exponent -> multiplication",
         
         match: {
             op: "^",
@@ -143,6 +147,7 @@ export const rules: IRule[] = [
 
     {
         name: "reverse equation",
+        shortName: "reverse equation",
         
         match: {
             op: "=",

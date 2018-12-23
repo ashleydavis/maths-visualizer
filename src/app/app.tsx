@@ -7,6 +7,7 @@ import { Row, RowAlign } from './components/row';
 import { Column, ColumnAlign } from './components/column';
 import { Card, InputGroup, FormGroup } from '@blueprintjs/core';
 import * as lodash from 'lodash';
+const html2canvas = require('html2canvas');
 
 //const defaultExpr = "x*y*z";
 const defaultExpr = "E = m*c^2";
@@ -19,19 +20,14 @@ export interface IAppState {
     expr: string;
     selectedExpr: string;
     transformed: IExpr[];
-    graph: any,
+    graph: any;
+    testImageCapture?: string;
 }
 
 const options = {
     autoResize: true,
     layout: {
-        //improvedLayout: true,
-        /*
-        hierarchical: {
-            enabled: true,
-            direction: "LR",
-        }
-        */
+        improvedLayout: true,
     },
     edges: {
         color: "black"
@@ -39,6 +35,8 @@ const options = {
 };
   
 export class AppUI extends React.Component<IAppProps, IAppState> {
+
+    formulaRef: React.RefObject<HTMLDivElement>;
 
     constructor(props: IAppProps) {
         super(props);
@@ -53,6 +51,21 @@ export class AppUI extends React.Component<IAppProps, IAppState> {
 
         this.onExprChange = this.onExprChange.bind(this);
         this.rebuildGraph = lodash.debounce(this.rebuildGraph.bind(this), 1000);
+        this.formulaRef = React.createRef<HTMLDivElement>();
+    }
+
+    componentDidMount() {
+        setTimeout(() => {
+            html2canvas(this.formulaRef.current)
+                .then((canvas: HTMLCanvasElement) => {
+                    //document.body.appendChild(canvas);
+                    var data = canvas.toDataURL('image/png');
+                    var src = encodeURI(data);
+                    this.setState({
+                        testImageCapture: src,
+                    });
+                });        
+        }, 1000); //TODO: Is there an event when Mathjax has rendered?
     }
 
     private rebuildGraph() {
@@ -95,7 +108,7 @@ export class AppUI extends React.Component<IAppProps, IAppState> {
                             return {
                                 from: expr.expr,
                                 to: pathway.dest.expr,
-                                label: pathway.rule.name,
+                                label: pathway.rule.shortName,
                                 arrows: "to,from",
                             }
                         })
@@ -116,6 +129,7 @@ export class AppUI extends React.Component<IAppProps, IAppState> {
                 }
             }
         }
+
 
         return (
             <div
@@ -161,11 +175,22 @@ export class AppUI extends React.Component<IAppProps, IAppState> {
                                 </div>
                                 <div className="w-full mt-8">
                                     <div>Selected</div>
-                                    <Card className="mt-2 mr-8">
-                                        <MathJax 
-                                            math={"`" + this.state.selectedExpr + "`"}
-                                            />
+                                    <Card 
+                                        className="mt-2 mr-8"
+                                        >
+                                        <div
+                                            ref={this.formulaRef}
+                                            >
+                                            <MathJax 
+                                                math={"`" + this.state.selectedExpr + "`"}
+                                                />
+                                        </div>
                                     </Card>
+                                </div>
+
+                                <div className="w-full mt-8">
+                                    <div>Test capture</div>
+                                    <img src={this.state.testImageCapture} />
                                 </div>
                             </Column>
 

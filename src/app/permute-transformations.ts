@@ -24,6 +24,7 @@ export interface IMatcher {
 
 export interface IRule {
     name: string;
+    shortName: string;
     def?: string;
     animation: string;
     match: IMatcher;
